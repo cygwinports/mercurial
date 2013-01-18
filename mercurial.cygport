@@ -1,0 +1,13 @@
+inherit python-distutils
+
+NAME="mercurial"
+VERSION=2.4.2
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="Distributed source control management tool"
+DESCRIPTION="Mercurial is a free, distributed source control management tool.
+It offers you the power to efficiently handle projects of any size while using
+an intuitive interface. It is easy to use and hard to break, making it ideal
+for anyone working with versioned files."
+HOMEPAGE="http://mercurial.selenic.com/"
+SRC_URI="http://mercurial.selenic.com/release/${P}.tar.gz"
