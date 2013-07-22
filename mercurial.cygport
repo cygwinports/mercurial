@@ -12,16 +12,14 @@ for anyone working with versioned files."
 HOMEPAGE="http://mercurial.selenic.com/"
 SRC_URI="http://mercurial.selenic.com/release/mercurial-${VERSION}.tar.gz"
 
-PKG_NAMES="${NAME} ${NAME}-bzr ${NAME}-svn ${NAME}-highlight ${NAME}-gui emacs-${NAME}"
+PKG_NAMES="${NAME} ${NAME}-convert ${NAME}-highlight ${NAME}-gui emacs-${NAME}"
 mercurial_REQUIRES="ca-certificates"
-mercurial_CONTENTS="--exclude=bzr.py* --exclude=hgk* --exclude=subversion.py*
-	--exclude=transport.py* --exclude=highlight
+mercurial_CONTENTS="--exclude=bzr.py* --exclude=hgk* --exclude=convert
+	--exclude=highlight
 	etc/ usr/bin/ ${PYTHON_SITELIB#/} usr/share/doc/ usr/share/man/"
-mercurial_bzr_SUMMARY="Bazaar conversion extension for Mercurial"
-mercurial_bzr_CONTENTS="${PYTHON_SITELIB#/}/hgext/convert/bzr.py*"
-mercurial_svn_SUMMARY="Subversion conversion extension for Mercurial"
-mercurial_svn_CONTENTS="${PYTHON_SITELIB#/}/hgext/convert/subversion.py*
-		${PYTHON_SITELIB#/}/hgext/convert/transport.py*"
+mercurial_convert_SUMMARY="VCS conversion extension for Mercurial"
+mercurial_convert_REQUIRES="cvs git monotone" # bzr python-svn
+mercurial_convert_CONTENTS="${PYTHON_SITELIB#/}/hgext/convert/"
 mercurial_highlight_SUMMARY="Syntax highlighting extension for Mercurial hgweb"
 mercurial_highlight_CONTENTS="${PYTHON_SITELIB#/}/hgext/highlight/"
 mercurial_gui_SUMMARY="GUI for Mercurial"
