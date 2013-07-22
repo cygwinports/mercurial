@@ -1,7 +1,7 @@
-inherit python-distutils
+inherit emacs python-distutils
 
 NAME="mercurial"
-VERSION=2.4.2
+VERSION=2.6.3
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Distributed source control management tool"
@@ -10,4 +10,47 @@ It offers you the power to efficiently handle projects of any size while using
 an intuitive interface. It is easy to use and hard to break, making it ideal
 for anyone working with versioned files."
 HOMEPAGE="http://mercurial.selenic.com/"
-SRC_URI="http://mercurial.selenic.com/release/${P}.tar.gz"
+SRC_URI="http://mercurial.selenic.com/release/mercurial-${VERSION}.tar.gz"
+
+PKG_NAMES="${NAME} ${NAME}-bzr ${NAME}-svn ${NAME}-highlight ${NAME}-gui emacs-${NAME}"
+mercurial_REQUIRES="ca-certificates"
+mercurial_CONTENTS="--exclude=bzr.py* --exclude=hgk* --exclude=subversion.py*
+	--exclude=transport.py* --exclude=highlight
+	etc/ usr/bin/ ${PYTHON_SITELIB#/} usr/share/doc/ usr/share/man/"
+mercurial_bzr_SUMMARY="Bazaar conversion extension for Mercurial"
+mercurial_bzr_CONTENTS="${PYTHON_SITELIB#/}/hgext/convert/bzr.py*"
+mercurial_svn_SUMMARY="Subversion conversion extension for Mercurial"
+mercurial_svn_CONTENTS="${PYTHON_SITELIB#/}/hgext/convert/subversion.py*
+		${PYTHON_SITELIB#/}/hgext/convert/transport.py*"
+mercurial_highlight_SUMMARY="Syntax highlighting extension for Mercurial hgweb"
+mercurial_highlight_CONTENTS="${PYTHON_SITELIB#/}/hgext/highlight/"
+mercurial_gui_SUMMARY="GUI for Mercurial"
+mercurial_gui_CONTENTS="usr/bin/hgk ${PYTHON_SITELIB#/}/hgext/hgk.py*"
+emacs_mercurial_SUMMARY="Mercurial integration mode for Emacs"
+emacs_mercurial_REQUIRES="emacs mercurial"
+emacs_mercurial_CONTENTS="${EMACS_SITE#/}"
+
+
+src_install() {
+	cd ${B}
+	python_distutils_install
+
+	pushd ${S}/contrib
+
+	dobin hgk hg-ssh
+
+	doemacs mercurial.el mq.el
+
+	insinto /etc/mercurial/hgrc.d
+	newins mergetools.hgrc mergetools.rc
+
+	cat > ${D}/etc/mercurial/hgrc.d/certs.rc <<_EOF
+# http://mercurial.selenic.com/wiki/CACertificates
+[web]
+cacerts = /usr/ssl/certs/ca-bundle.crt
+_EOF
+
+	popd
+
+	doman ${S}/doc/*.[15]
+}
